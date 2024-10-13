@@ -38,16 +38,15 @@
 
 
 ### mi SaaS Stack
-git clone https://github.com/jpradoar/event-driven-architecture.git
-cd event-driven-architecture/helm-chart/
-helm upgrade -i --create-namespace -n default  mqtt .
-# 5min
+	git clone https://github.com/jpradoar/event-driven-architecture.git
+	cd event-driven-architecture/helm-chart/
+	helm upgrade -i --create-namespace -n default  mqtt .
+	# 5min
 
-kubectl get pod,svc
+	kubectl get pod,svc
 
-
-kubectl port-forward --address 0.0.0.0 deployment/producer 5000:5000 &
-kubectl port-forward --address 0.0.0.0 service/webserver 8080:80 &
+	kubectl port-forward --address 0.0.0.0 deployment/producer 5000:5000 &
+	kubectl port-forward --address 0.0.0.0 service/webserver 8080:80 &
 
 
 
