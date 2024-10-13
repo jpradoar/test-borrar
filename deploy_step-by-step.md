@@ -29,6 +29,7 @@
 	kubectl get pod -A
 	sudo microk8s status
 
+
 ### Install helm on local machine
 	curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 	chmod 700 get_helm.sh
@@ -58,7 +59,7 @@ kubectl port-forward --address 0.0.0.0 service/webserver 8080:80 &
 	kubectl create namespace monitoring
 	helm -n monitoring install loki grafana/loki-stack --set loki.image.tag=2.9.1  
 	helm -n monitoring install prometheus prometheus-community/prometheus
-	helm -n monitoring install grafana grafana/grafana -f grafana-values.yaml
+	helm -n monitoring install grafana grafana/grafana -f https://raw.githubusercontent.com/jpradoar/test/refs/heads/main/grafana-values.yaml
 
 	kubectl -n monitoring port-forward --address 0.0.0.0 service/grafana 3000:80
 
