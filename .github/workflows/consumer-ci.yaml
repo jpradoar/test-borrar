@@ -39,7 +39,7 @@ jobs:
     - name: Show last version of docker-hub image
       id: last_version_remote_file
       run: |
-        LastVersion=$(curl -s "https://hub.docker.com/v2/repositories/${{ env.REPO_OWNER }}/${{ env.REPO_APP }}/tags/?page_size=2" | jq -r '.results[].name'|sort -M|grep -v latest|tail -1)
+        LastVersion=$(curl -s "https://hub.docker.com/v2/repositories/jpradoar/${{ env.REPO_APP }}/tags/?page_size=2" | jq -r '.results[].name'|sort -M|grep -v latest|tail -1)
         echo "LAST_VERSION=$LastVersion " >> "$GITHUB_OUTPUT"
 
     - name: Generate new version with semantic version
@@ -60,7 +60,7 @@ jobs:
       with:
         context: ${{ env.BUILD_CONTEXT }}
         push: true
-        tags: '${{ env.REPO_OWNER }}/${{ env.REPO_APP }}:${{ steps.nversion.outputs.NEW_VERSION }}'
+        tags: 'jpradoar/${{ env.REPO_APP }}:${{ steps.nversion.outputs.NEW_VERSION }}'
 
 
     #- name: Run Trivy vulnerability scanner
