@@ -55,13 +55,13 @@ jobs:
         echo "Last old version ${{ steps.last_version_remote_file.outputs.LAST_VERSION }}"
         echo "New version ${{ steps.nversion.outputs.NEW_VERSION }}" 
 
-
     - name: Build and push
       uses: docker/build-push-action@v4
       with:
-        context: ${{ env.BUILD_CONTEXT }}
+        context:  ${{ env.BUILD_CONTEXT }}
         push: true
-        tags: '${{ env.REPO_OWNER }}/${{ env.REPO_APP }}:${{ steps.nversion.outputs.NEW_VERSION }}'        
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPO_APP }}:${{ steps.nversion.outputs.NEW_VERSION }}
+
 
 
     #- name: Run Trivy vulnerability scanner
