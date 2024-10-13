@@ -61,7 +61,7 @@ def executeDeployment(environment,client,product,trace_id):
   subprocess.run("helm repo add bitnami https://charts.bitnami.com/bitnami", shell=True)
   sendmsg("-   *[Consumer] [run]  Deployment for "+client+" with product "+product+" ")
   #subprocess.run("helm upgrade -i -n mqtt-poc --create-namespace "+client+" bitnami/"+product+" ", shell=True)
-  subprocess.run("helm upgrade -i -n mqtt-poc --create-namespace "+client+" bitnami/"+product+" --set podAnnotations.trace_id="+trace_id+",podAnnotations.client="+client+",podLabels.trace_id="+trace_id+",podLabels.trace_id="+trace_id+" ", shell=True)
+  subprocess.run("helm upgrade -i -n "+client+" --create-namespace "+client+" bitnami/"+product+" --set podAnnotations.trace_id="+trace_id+",podAnnotations.client="+client+",podLabels.trace_id="+trace_id+",podLabels.trace_id="+trace_id+" ", shell=True)
   time.sleep(3)  # Los sleep solo los uso para que en la demo se vea con un poco de delay
   sendmsg("-   *[Consumer] deployment client: [" + client + "] DONE" )
 
