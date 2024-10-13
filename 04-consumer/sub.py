@@ -3,7 +3,7 @@ import pika, os
 import json
 import sys
 import subprocess
-import time      
+import time
 import logging   # Para login a consola (stdout)
 from prometheus_client import start_http_server # usado para levantar el http_server
 from prometheus_client import Info, Counter     # usado para exponer metricas de info y contadores
@@ -40,21 +40,21 @@ def sendmsg(message):
 # Esta funcion es la que se encarga de enviar el mensaje a la cola para que el DBWriter agregue el cliente a la DB de clientes.
 # recibe los parametros filtrados del JSON original que envio la api customer-portal y genera un nuevo JSON que lo envia a la cola de clientes
 # donde será utilizado para escribir dicha data en la DB
-def WriteDB(client,archtype,hardware,product):     
+def WriteDB(client,archtype,hardware,product,trace_id):
   message = "-   *[Consumer] Send messaje to dbwriter to create new user in DBCLIENTS: [" + client + "] "
   sendmsg(message)
   channel.queue_declare(queue='clients', durable=True)
-  data = '{"client": "'+client+'","archtype": "'+archtype+'","hardware": "'+hardware+'","product": "'+product+'"}'
+  data = '{"client": "'+client+'","archtype": "'+archtype+'","hardware": "'+hardware+'","product": "'+product+'","trace_id": "'+trace_id+'"}'
   channel.basic_publish(exchange='', routing_key='clients', body=data)
-  sendmsg("-   *[Consumer] publish " + data)    
+  sendmsg("-   *[Consumer] publish " + data)
 
 # Esta funcion recibe el environment donde se va a deployar, el namespace y el nombre del cliente
 # Con todo eso genera un namespace y deploya el cliente.
 # En este caso para ahorrar APIs uso un subprocess para ejecutar un comando de linux  (helm).
-# Idealmente deberia ser otra api o proceso que ejecute esto pero a fines de la demo funciona bien como ejemplo. 
-def executeDeployment(environment,client,product):
+# Idealmente deberia ser otra api o proceso que ejecute esto pero a fines de la demo funciona bien como ejemplo.
+def executeDeployment(environment,client,product,trace_id):
   #
-  # Esta parte se ve fea, pero es solo para la demo 
+  # Esta parte se ve fea, pero es solo para la demo
   # y para no publicar codigo propietario use directamente el subprocess.
   # A fines practicos la funcionalidad es la misma.
   # 
@@ -90,9 +90,9 @@ def parseMsg(data):
   WriteDB(client,archtype,hardware,product)
   time.sleep (1)
   executeDeployment(environment, client, product)
-  time.sleep (1) 
+  time.sleep (1)
   finish_message(client)
- 
+
 def callback(ch, method, properties, body):
   parseMsg(body.decode("utf-8"))
 
