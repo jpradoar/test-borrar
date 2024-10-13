@@ -5,5 +5,7 @@
 **/*.key
 **/*.pem
 **/*.secure
+**/*terraform*
+**/*.terraform.*
 temp/
 tmp/
