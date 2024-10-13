@@ -44,12 +44,12 @@ def metrics_info():
   metric_info.info({'name':'dbwriter', 'version': '1.0.0', 'owner': 'jpradoar'})
 
 # Funcion que genera una conexión a una DB e inserta los datos recibidos en la misma. 
-def WriteDB(sql,val):
+def WriteDB(sql,val,trace_id):
   connector   = mysql.connector.connect(host=mysql_host,user=mysql_user,password=mysql_pass,database=mysql_db)
   db          = connector.cursor()
   db.execute(sql,val)
   connector.commit()
-  sendmsg("-   *[DBWriter] One record was inserted, RecordID:"+ str(db.lastrowid))
+  sendmsg("-   *[DBWriter] trace_id: "+trace_id+" One record was inserted, RecordID:"+ str(db.lastrowid))
   db.close()
   connector.close()
   sendmsg("-   *[DBWriter] Waiting messages in Queue: [ "+ queue +" ] ")  
@@ -86,7 +86,7 @@ def parseMsg(data):
   val         = (client,archtype,hardware,product,xdate,license)
   sql         = "INSERT INTO clients (client,archtype,hardware,product,xdate,license) VALUES (%s,%s,%s,%s,%s,%s)"
   sendmsg("-   *[DBWriter] Message trace_id: " + str(trace_id) + "\n")
-  WriteDB(sql,val)
+  WriteDB(sql,val,trace_id)
 
 # En general cuando uso docker-compose o kubernetes suele pasar que este servicio levanta antes que Rabbit.
 # Por tal motivo valido si el Rabbit esta listo, sino espero 5 segundos. 
